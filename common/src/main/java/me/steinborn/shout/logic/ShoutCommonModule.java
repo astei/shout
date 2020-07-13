@@ -7,6 +7,6 @@ import me.steinborn.shout.announcement.store.DummyAnnouncementStore;
 public class ShoutCommonModule extends AbstractModule {
     @Override
     protected void configure() {
-
+        bind(ShoutPlugin.class).asEagerSingleton();
     }
 }
