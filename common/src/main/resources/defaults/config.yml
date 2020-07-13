@@ -1,0 +1,10 @@
+# See https://shout.velocitypowered.com/ for information on how to configure the plugin.
+version: 1
+interval: 10
+display: chat
+chat:
+  prefix: '&e&l[Shout!]&r '
+storage:
+  type: flatfile
+  flatfile:
+    path: announcements.yml

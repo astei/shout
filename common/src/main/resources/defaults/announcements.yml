@@ -1,0 +1,17 @@
+# Storage for Shout! announcements. Be very careful when modifying this file.
+# See https://shout.velocitypowered.com/ for information on how to configure the plugin.
+version: 1
+announcements:
+  - content: "Hello, and welcome to Shout!"
+  - content: "You have chosen &athe best announcement plugin&r for &aBukkit&r, &aBungeeCord&r, &aSponge&r, and &aVelocity&r!"
+  - content: "Shout supports &#ff0000R&#00ff00G&#0000ffB&r..."
+  - content:
+      type: json
+      message: '{"text": "JSON...", "color": "#a5c8b9"}'
+  - content:
+      type: minimessage
+      message: '<rainbow>MiniMessage</rainbow>...'
+  - content:
+      type: markdown
+      message: '**and** MiniMessage Markdown!'
+  - content: "Thanks for choosing Shout - we're sure you'll enjoy it."

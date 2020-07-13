@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api adventure
+    implementation adventureGsonSerializer
+    implementation adventureLegacySerializer
+    implementation adventureMiniMessage
+    api guice
+    api guiceAssistedInject
+    api slf4j
+    implementation configurate
+    implementation configurateYaml
+    implementation configurateGson
+}

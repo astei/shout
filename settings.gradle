@@ -1,0 +1,6 @@
+rootProject.name = 'shout-parent'
+
+['common', 'bukkit', 'bungeecord', 'sponge', 'velocity'].forEach { module ->
+    include module
+    findProject(":${module}").name = "shout-${module}"
+}

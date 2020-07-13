@@ -1,0 +1,42 @@
+apply from: '../gradle/shadow.gradle'
+
+shadowJar {
+    // Velocity already includes a lot of the dependencies we need. Awesome! The only exception is MiniMessage.
+    // For that reason, it's better to just whitelist what we need... except that Gradle Shadow doesn't like that.
+    // So please enjoy this long blacklist. Ugh.
+
+    // Exclude Kyori dependencies, sans MiniMessage
+    exclude 'net/kyori/examination/**'
+    exclude 'net/kyori/adventure/audience/**'
+    exclude 'net/kyori/adventure/bossbar/**'
+    exclude 'net/kyori/adventure/inventory/**'
+    exclude 'net/kyori/adventure/key/**'
+    exclude 'net/kyori/adventure/nbt/**'
+    exclude 'net/kyori/adventure/sound/**'
+    exclude 'net/kyori/adventure/text/*'
+    exclude 'net/kyori/adventure/text/event/**'
+    exclude 'net/kyori/adventure/text/renderer/**'
+    exclude 'net/kyori/adventure/text/format/**'
+    exclude 'net/kyori/adventure/text/serializer/**'
+    exclude 'net/kyori/adventure/title/**'
+    exclude 'net/kyori/adventure/util/**'
+
+    // Exclude Configurate and related dependencies (Gson is excluded below)
+    exclude 'ninja/leaping/configurate/**'
+    exclude 'org/yaml/snakeyaml/**'
+
+    // Excludes for Guice, Guava, and Gson
+    exclude 'org/aopalliance/**'
+    exclude 'javax/annotation/**'
+    exclude 'com/google/**'
+    exclude 'javax/inject/**'
+
+    // Exclude SLF4J
+    exclude 'org/slf4j/**'
+}
+
+dependencies {
+    implementation project(':shout-common')
+    compileOnly 'com.velocitypowered:velocity-api:1.1.0-SNAPSHOT'
+    annotationProcessor 'com.velocitypowered:velocity-api:1.1.0-SNAPSHOT'
+}

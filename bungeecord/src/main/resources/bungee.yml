@@ -1,0 +1,4 @@
+name: Shout
+author: tuxed
+main: me.steinborn.shout.platform.bungee.ShoutBungeeBootstrap
+version: "0.1"

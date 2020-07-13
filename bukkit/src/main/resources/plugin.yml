@@ -1,0 +1,8 @@
+name: Shout
+author: tuxed
+main: me.steinborn.shout.platform.bukkit.ShoutBukkitBootstrap
+version: "0.1"
+softdepend: [ViaVersion]
+
+# This is not really a 1.13+ plugin, but we're putting this here to make sure Spigot doesn't try to transform us.
+api-version: "1.13"
