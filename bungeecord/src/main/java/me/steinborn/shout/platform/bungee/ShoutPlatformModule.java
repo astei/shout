@@ -1,14 +1,12 @@
 package me.steinborn.shout.platform.bungee;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import me.steinborn.shout.platform.ConfigDir;
 import me.steinborn.shout.platform.ShoutPlatform;
 import me.steinborn.shout.platform.ShoutScheduler;
 import me.steinborn.shout.platform.bungee.support.BungeeShoutPlatform;
 import me.steinborn.shout.platform.bungee.support.BungeeShoutScheduler;
+import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -38,8 +36,8 @@ public class ShoutPlatformModule extends AbstractModule {
         bind(BungeeAudiences.class).toInstance(BungeeAudiences.create(plugin));
 
         // Shout support
-        bind(new TypeLiteral<ShoutPlatform<?>>() {}).to(BungeeShoutPlatform.class);
-        bind(new TypeLiteral<ShoutPlatform<ProxiedPlayer>>() {}).to(BungeeShoutPlatform.class);
+        bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(BungeeShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<ProxiedPlayer>>() {}).toProvider(BungeeShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(BungeeShoutScheduler.class);
         bind(Path.class).annotatedWith(ConfigDir.class).toInstance(plugin.getDataFolder().toPath());
     }
@@ -65,6 +63,24 @@ public class ShoutPlatformModule extends AbstractModule {
             } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e2) {
                 throw new RuntimeException("Unable to initialize SLF4J logging adapter. We cannot continue!");
             }
+        }
+    }
+
+    @Singleton
+    private static class BungeeShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<ProxiedPlayer>> {
+        private final BungeeAudiences audiences;
+        private final ProxyServer server;
+
+        @Inject
+        private BungeeShoutPlatformProvider(BungeeAudiences audiences, ProxyServer server) {
+            super();
+            this.audiences = audiences;
+            this.server = server;
+        }
+
+        @Override
+        protected ShoutPlatform<ProxiedPlayer> actualProvide() {
+            return new BungeeShoutPlatform(server, audiences);
         }
     }
 }

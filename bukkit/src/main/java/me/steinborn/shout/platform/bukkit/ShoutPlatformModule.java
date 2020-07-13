@@ -1,9 +1,6 @@
 package me.steinborn.shout.platform.bukkit;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import me.steinborn.shout.platform.ConfigDir;
 import me.steinborn.shout.platform.ShoutPlatform;
@@ -12,8 +9,10 @@ import me.steinborn.shout.platform.ShoutScheduler;
 import me.steinborn.shout.platform.bukkit.support.BukkitShoutPlatform;
 import me.steinborn.shout.platform.bukkit.support.BukkitShoutPlayer;
 import me.steinborn.shout.platform.bukkit.support.BukkitShoutScheduler;
+import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.slf4j.Logger;
 import org.slf4j.impl.JDK14LoggerAdapter;
@@ -40,7 +39,8 @@ public class ShoutPlatformModule extends AbstractModule {
         bind(BukkitAudiences.class).toInstance(BukkitAudiences.create(plugin));
 
         // Shout support
-        bind(new TypeLiteral<ShoutPlatform<?>>() {}).to(BukkitShoutPlatform.class);
+        bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(BukkitShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<Player>>() {}).toProvider(BukkitShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(BukkitShoutScheduler.class);
         install(new FactoryModuleBuilder()
                 .implement(ShoutPlayer.class, BukkitShoutPlayer.class)
@@ -69,6 +69,25 @@ public class ShoutPlatformModule extends AbstractModule {
             } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e2) {
                 throw new RuntimeException("Unable to initialize SLF4J logging adapter. We cannot continue!");
             }
+        }
+    }
+
+
+    @Singleton
+    private static class BukkitShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<Player>> {
+        private final BukkitShoutPlayer.Factory playerFactory;
+        private final Server server;
+
+        @Inject
+        private BukkitShoutPlatformProvider(BukkitShoutPlayer.Factory playerFactory, Server server) {
+            super();
+            this.playerFactory = playerFactory;
+            this.server = server;
+        }
+
+        @Override
+        protected ShoutPlatform<Player> actualProvide() {
+            return new BukkitShoutPlatform(server, playerFactory);
         }
     }
 }
