@@ -9,7 +9,7 @@ Shout! is a modern announcement plugin for Minecraft.
   * Paper recommended
 * BungeeCord (all versions with 1.7 support and above)
   * Waterfall/Travertine recommended
-* Sponge (WIP, at least Sponge 7)
+* Sponge (at least Sponge 7)
 * Velocity (requires Velocity 1.1.0 or above)
 
 ## Features
