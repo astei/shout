@@ -8,6 +8,7 @@ import me.steinborn.shout.platform.bungee.support.BungeeShoutPlatform;
 import me.steinborn.shout.platform.bungee.support.BungeeShoutScheduler;
 import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -36,8 +37,8 @@ public class ShoutPlatformModule extends AbstractModule {
         bind(BungeeAudiences.class).toInstance(BungeeAudiences.create(plugin));
 
         // Shout support
-        bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(BungeeShoutPlatformProvider.class);
-        bind(new TypeLiteral<ShoutPlatform<ProxiedPlayer>>() {}).toProvider(BungeeShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<?, ?>>() {}).toProvider(BungeeShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<CommandSender, ProxiedPlayer>>() {}).toProvider(BungeeShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(BungeeShoutScheduler.class);
         bind(Path.class).annotatedWith(ConfigDir.class).toInstance(plugin.getDataFolder().toPath());
     }
@@ -67,7 +68,7 @@ public class ShoutPlatformModule extends AbstractModule {
     }
 
     @Singleton
-    private static class BungeeShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<ProxiedPlayer>> {
+    private static class BungeeShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<CommandSender, ProxiedPlayer>> {
         private final BungeeAudiences audiences;
         private final ProxyServer server;
 
@@ -79,7 +80,7 @@ public class ShoutPlatformModule extends AbstractModule {
         }
 
         @Override
-        protected ShoutPlatform<ProxiedPlayer> actualProvide() {
+        protected ShoutPlatform<CommandSender, ProxiedPlayer> actualProvide() {
             return new BungeeShoutPlatform(server, audiences);
         }
     }

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ShoutPlugin {
     private final ConfigurationHolder configurationHolder;
-    private final ShoutPlatform<?> platform;
+    private final ShoutPlatform<?, ?> platform;
     private final ShoutScheduler scheduler;
     private final Logger logger;
     private final AnnouncementChainStorage announcementChainStorage;
@@ -22,7 +22,7 @@ public class ShoutPlugin {
     private ShoutScheduler.Task platformAnnouncerTask;
 
     @Inject
-    public ShoutPlugin(ConfigurationHolder configurationHolder, ShoutPlatform<?> platform, ShoutScheduler scheduler,
+    public ShoutPlugin(ConfigurationHolder configurationHolder, ShoutPlatform<?, ?> platform, ShoutScheduler scheduler,
                        Logger logger, AnnouncementChainStorage announcementChainStorage, AnnouncerTask announcerTask) {
         this.configurationHolder = configurationHolder;
         this.platform = platform;

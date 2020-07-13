@@ -5,12 +5,14 @@ import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import me.steinborn.shout.platform.PlatformVersion;
+import me.steinborn.shout.platform.ShoutCommandInvoker;
 import me.steinborn.shout.platform.ShoutPlatform;
 import me.steinborn.shout.platform.ShoutPlayer;
 import net.kyori.adventure.platform.spongeapi.SpongeAudiences;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -20,7 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Singleton
-public class SpongeShoutPlatform implements ShoutPlatform<Player> {
+public class SpongeShoutPlatform implements ShoutPlatform<CommandSource, Player> {
     private final Server server;
     private final Map<Player, ShoutPlayer> playerMappings;
     private final Collection<ShoutPlayer> playerCollection;
@@ -69,5 +71,19 @@ public class SpongeShoutPlatform implements ShoutPlatform<Player> {
     @Override
     public ShoutPlayer player(Player platformPlayer) {
         return playerMappings.computeIfAbsent(platformPlayer, ignored -> new SpongeShoutPlayer(audiences, platformPlayer));
+    }
+
+    @Override
+    public ShoutCommandInvoker console() {
+        return this.invoker(this.server.getConsole());
+    }
+
+    @Override
+    public ShoutCommandInvoker invoker(CommandSource sender) {
+        if (sender instanceof Player) {
+            return this.player((Player) sender);
+        } else {
+            return new SpongeShoutCommandInvoker(sender, audiences, this);
+        }
     }
 }

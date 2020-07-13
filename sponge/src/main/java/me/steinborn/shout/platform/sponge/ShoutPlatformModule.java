@@ -10,6 +10,7 @@ import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.spongeapi.SpongeAudiences;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.nio.file.Path;
@@ -24,8 +25,8 @@ public class ShoutPlatformModule extends AbstractModule {
     @Override
     protected void configure() {
         // Shout support
-        bind(new TypeLiteral<ShoutPlatform<Player>>() {}).toProvider(SpongeShoutPlatformProvider.class);
-        bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(SpongeShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<CommandSource, Player>>() {}).toProvider(SpongeShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<?, ?>>() {}).toProvider(SpongeShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(SpongeShoutScheduler.class);
         bind(Path.class).annotatedWith(ConfigDir.class).toInstance(dataDirectory);
     }
@@ -36,7 +37,7 @@ public class ShoutPlatformModule extends AbstractModule {
     }
 
     @Singleton
-    private static class SpongeShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<Player>> {
+    private static class SpongeShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<CommandSource, Player>> {
         private final SpongeAudiences audiences;
         private final Server server;
 
@@ -48,7 +49,7 @@ public class ShoutPlatformModule extends AbstractModule {
         }
 
         @Override
-        protected ShoutPlatform<Player> actualProvide() {
+        protected ShoutPlatform<CommandSource, Player> actualProvide() {
             return new SpongeShoutPlatform(server, audiences);
         }
     }

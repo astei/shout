@@ -11,12 +11,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 
 public class AnnouncerTask implements Runnable {
-    private final ShoutPlatform<?> platform;
+    private final ShoutPlatform<?, ?> platform;
     private final ConfigurationHolder configurationHolder;
     private final AnnouncementChainStorage chainStorage;
 
     @Inject
-    public AnnouncerTask(ShoutPlatform<?> platform,
+    public AnnouncerTask(ShoutPlatform<?, ?> platform,
                          ConfigurationHolder configurationHolder,
                          AnnouncementChainStorage chainStorage) {
         this.platform = platform;

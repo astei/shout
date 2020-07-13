@@ -4,11 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
 import com.google.inject.Inject;
 import me.steinborn.shout.platform.PlatformVersion;
+import me.steinborn.shout.platform.ShoutCommandInvoker;
 import me.steinborn.shout.platform.ShoutPlatform;
 import me.steinborn.shout.platform.ShoutPlayer;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.AbstractCollection;
@@ -16,7 +18,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-public class BukkitShoutPlatform implements ShoutPlatform<Player> {
+public class BukkitShoutPlatform implements ShoutPlatform<CommandSender, Player> {
     private final Server server;
     private final BukkitAudiences audiences;
     private final Map<Player, ShoutPlayer> playerMappings;
@@ -64,5 +66,19 @@ public class BukkitShoutPlatform implements ShoutPlatform<Player> {
     @Override
     public ShoutPlayer player(Player platformPlayer) {
         return playerMappings.computeIfAbsent(platformPlayer, k -> new BukkitShoutPlayer(audiences, platformPlayer));
+    }
+
+    @Override
+    public ShoutCommandInvoker console() {
+        return new BukkitShoutCommandInvoker(server.getConsoleSender(), audiences, this);
+    }
+
+    @Override
+    public ShoutCommandInvoker invoker(CommandSender sender) {
+        if (sender instanceof Player) {
+            return this.player((Player) sender);
+        } else {
+            return new BukkitShoutCommandInvoker(server.getConsoleSender(), audiences, this);
+        }
     }
 }

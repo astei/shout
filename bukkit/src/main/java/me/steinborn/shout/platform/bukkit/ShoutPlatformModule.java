@@ -10,6 +10,7 @@ import me.steinborn.shout.platform.bukkit.support.BukkitShoutScheduler;
 import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.slf4j.Logger;
@@ -37,8 +38,8 @@ public class ShoutPlatformModule extends AbstractModule {
         bind(BukkitAudiences.class).toInstance(BukkitAudiences.create(plugin));
 
         // Shout support
-        bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(BukkitShoutPlatformProvider.class);
-        bind(new TypeLiteral<ShoutPlatform<Player>>() {}).toProvider(BukkitShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<?, ?>>() {}).toProvider(BukkitShoutPlatformProvider.class);
+        bind(new TypeLiteral<ShoutPlatform<CommandSender, Player>>() {}).toProvider(BukkitShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(BukkitShoutScheduler.class);
         bind(Path.class).annotatedWith(ConfigDir.class).toInstance(plugin.getDataFolder().toPath());
     }
@@ -69,7 +70,7 @@ public class ShoutPlatformModule extends AbstractModule {
 
 
     @Singleton
-    private static class BukkitShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<Player>> {
+    private static class BukkitShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<CommandSender, Player>> {
         private final BukkitAudiences audiences;
         private final Server server;
 
@@ -81,7 +82,7 @@ public class ShoutPlatformModule extends AbstractModule {
         }
 
         @Override
-        protected ShoutPlatform<Player> actualProvide() {
+        protected ShoutPlatform<CommandSender, Player> actualProvide() {
             return new BukkitShoutPlatform(server, audiences);
         }
     }

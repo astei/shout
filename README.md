@@ -24,3 +24,4 @@ Shout has two primary goals:
 * The world's **best** announcement plugin for Minecraft, packed with features
 * Incredibly **portable**, with a goal of less than 500 lines of platform-specific code per platform
   * As long as `adventure-platform` supports the platform (or the platform supports `adventure` directly such as Velocity 1.1.0+), Shout can support it too
+  * Typically, a port takes about 30 minutes to do!
