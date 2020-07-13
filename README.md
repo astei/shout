@@ -1,3 +1,4 @@
+![Shout! logo](https://i.imgur.com/xmPqFs1.png "banner")
 # Shout!
 
 Shout! is a modern announcement plugin for Minecraft.
