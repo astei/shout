@@ -1,8 +1,6 @@
 package me.steinborn.shout.platform.bukkit.support;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import me.steinborn.shout.platform.ShoutPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -17,8 +15,7 @@ public class BukkitShoutPlayer implements ShoutPlayer, ForwardingAudience {
     private final Audience wrappedAudience;
     private final Player player;
 
-    @Inject
-    private BukkitShoutPlayer(BukkitAudiences audiences, @Assisted Player player) {
+    BukkitShoutPlayer(BukkitAudiences audiences, Player player) {
         this.player = player;
         this.wrappedAudience = audiences.player(player);
     }
@@ -51,9 +48,5 @@ public class BukkitShoutPlayer implements ShoutPlayer, ForwardingAudience {
     @Override
     public @NonNull Iterable<? extends Audience> audiences() {
         return ImmutableList.of(this.wrappedAudience);
-    }
-
-    public interface Factory {
-        ShoutPlayer create(Player player);
     }
 }

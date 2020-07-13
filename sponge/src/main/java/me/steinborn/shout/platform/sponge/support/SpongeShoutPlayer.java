@@ -2,7 +2,6 @@ package me.steinborn.shout.platform.sponge.support;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import me.steinborn.shout.platform.ShoutPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -18,7 +17,7 @@ public class SpongeShoutPlayer implements ShoutPlayer, ForwardingAudience {
     private final Player player;
 
     @Inject
-    SpongeShoutPlayer(SpongeAudiences audiences, @Assisted Player player) {
+    SpongeShoutPlayer(SpongeAudiences audiences, Player player) {
         this.player = player;
         this.wrappedAudience = audiences.player(player);
     }

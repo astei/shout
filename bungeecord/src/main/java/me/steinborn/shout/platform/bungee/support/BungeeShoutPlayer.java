@@ -1,8 +1,6 @@
 package me.steinborn.shout.platform.bungee.support;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import me.steinborn.shout.platform.ShoutPlayer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
@@ -17,8 +15,7 @@ class BungeeShoutPlayer implements ShoutPlayer, ForwardingAudience {
     private final Audience wrappedAudience;
     private final ProxiedPlayer player;
 
-    @Inject
-    BungeeShoutPlayer(BungeeAudiences audiences, @Assisted ProxiedPlayer player) {
+    BungeeShoutPlayer(BungeeAudiences audiences, ProxiedPlayer player) {
         this.player = player;
         this.wrappedAudience = audiences.player(player);
     }

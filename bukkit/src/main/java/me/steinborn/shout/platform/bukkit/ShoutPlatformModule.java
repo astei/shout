@@ -1,10 +1,8 @@
 package me.steinborn.shout.platform.bukkit;
 
 import com.google.inject.*;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import me.steinborn.shout.platform.ConfigDir;
 import me.steinborn.shout.platform.ShoutPlatform;
-import me.steinborn.shout.platform.ShoutPlayer;
 import me.steinborn.shout.platform.ShoutScheduler;
 import me.steinborn.shout.platform.bukkit.support.BukkitShoutPlatform;
 import me.steinborn.shout.platform.bukkit.support.BukkitShoutPlayer;
@@ -42,9 +40,6 @@ public class ShoutPlatformModule extends AbstractModule {
         bind(new TypeLiteral<ShoutPlatform<?>>() {}).toProvider(BukkitShoutPlatformProvider.class);
         bind(new TypeLiteral<ShoutPlatform<Player>>() {}).toProvider(BukkitShoutPlatformProvider.class);
         bind(ShoutScheduler.class).to(BukkitShoutScheduler.class);
-        install(new FactoryModuleBuilder()
-                .implement(ShoutPlayer.class, BukkitShoutPlayer.class)
-                .build(BukkitShoutPlayer.Factory.class));
         bind(Path.class).annotatedWith(ConfigDir.class).toInstance(plugin.getDataFolder().toPath());
     }
 
@@ -75,19 +70,19 @@ public class ShoutPlatformModule extends AbstractModule {
 
     @Singleton
     private static class BukkitShoutPlatformProvider extends ExactlyOnceProvider<ShoutPlatform<Player>> {
-        private final BukkitShoutPlayer.Factory playerFactory;
+        private final BukkitAudiences audiences;
         private final Server server;
 
         @Inject
-        private BukkitShoutPlatformProvider(BukkitShoutPlayer.Factory playerFactory, Server server) {
+        private BukkitShoutPlatformProvider(BukkitAudiences audiences, Server server) {
             super();
-            this.playerFactory = playerFactory;
+            this.audiences = audiences;
             this.server = server;
         }
 
         @Override
         protected ShoutPlatform<Player> actualProvide() {
-            return new BukkitShoutPlatform(server, playerFactory);
+            return new BukkitShoutPlatform(server, audiences);
         }
     }
 }

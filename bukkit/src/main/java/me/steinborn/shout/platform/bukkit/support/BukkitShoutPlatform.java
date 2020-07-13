@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import me.steinborn.shout.platform.PlatformVersion;
 import me.steinborn.shout.platform.ShoutPlatform;
 import me.steinborn.shout.platform.ShoutPlayer;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -17,14 +18,14 @@ import java.util.Map;
 
 public class BukkitShoutPlatform implements ShoutPlatform<Player> {
     private final Server server;
-    private final BukkitShoutPlayer.Factory playerFactory;
+    private final BukkitAudiences audiences;
     private final Map<Player, ShoutPlayer> playerMappings;
     private final Collection<ShoutPlayer> playerCollection;
 
     @Inject
-    public BukkitShoutPlatform(Server server, BukkitShoutPlayer.Factory playerFactory) {
+    public BukkitShoutPlatform(Server server, BukkitAudiences audiences) {
         this.server = server;
-        this.playerFactory = playerFactory;
+        this.audiences = audiences;
         this.playerMappings = new MapMaker().weakKeys().makeMap();
         this.playerCollection = new AbstractCollection<ShoutPlayer>() {
             @Override
@@ -62,6 +63,6 @@ public class BukkitShoutPlatform implements ShoutPlatform<Player> {
 
     @Override
     public ShoutPlayer player(Player platformPlayer) {
-        return playerMappings.computeIfAbsent(platformPlayer, playerFactory::create);
+        return playerMappings.computeIfAbsent(platformPlayer, k -> new BukkitShoutPlayer(audiences, platformPlayer));
     }
 }
