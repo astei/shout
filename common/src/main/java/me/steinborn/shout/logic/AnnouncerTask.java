@@ -32,6 +32,8 @@ public class AnnouncerTask implements Runnable {
             if (announcement == null) {
                 continue;
             }
+
+            // TODO: Boss bars and titles
             player.sendMessage(formatAnnouncement(announcement, player));
         }
     }

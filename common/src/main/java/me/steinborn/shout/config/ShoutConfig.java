@@ -94,4 +94,11 @@ public class ShoutConfig {
     enum StorageType {
         FLATFILE
     }
+
+    enum AnnouncementDisplayType {
+        CHAT,
+        ACTION_BAR,
+        BOSS_BAR,
+        TITLE
+    }
 }
