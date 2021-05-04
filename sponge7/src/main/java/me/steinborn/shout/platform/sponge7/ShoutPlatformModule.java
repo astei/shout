@@ -1,11 +1,11 @@
-package me.steinborn.shout.platform.sponge;
+package me.steinborn.shout.platform.sponge7;
 
 import com.google.inject.*;
 import me.steinborn.shout.platform.ConfigDir;
 import me.steinborn.shout.platform.ShoutPlatform;
 import me.steinborn.shout.platform.ShoutScheduler;
-import me.steinborn.shout.platform.sponge.support.SpongeShoutPlatform;
-import me.steinborn.shout.platform.sponge.support.SpongeShoutScheduler;
+import me.steinborn.shout.platform.sponge7.support.SpongeShoutPlatform;
+import me.steinborn.shout.platform.sponge7.support.SpongeShoutScheduler;
 import me.steinborn.shout.util.inject.ExactlyOnceProvider;
 import net.kyori.adventure.platform.spongeapi.SpongeAudiences;
 import org.spongepowered.api.Game;

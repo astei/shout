@@ -1,48 +1,48 @@
-package me.steinborn.shout.platform.sponge;
+package me.steinborn.shout.platform.sponge8;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import java.nio.file.Path;
 import me.steinborn.shout.logic.ShoutCommonModule;
 import me.steinborn.shout.logic.ShoutPlugin;
-import org.slf4j.Logger;
+import me.steinborn.shout.platform.sponge8.support.ShoutPlatformModule;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStartingServerEvent;
-import org.spongepowered.api.event.game.state.GameStoppingEvent;
-import org.spongepowered.api.plugin.Dependency;
-import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
+import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.jvm.Plugin;
 
-import java.nio.file.Path;
-
-@Plugin(id = "shout",
-        name = "Shout",
-        version = "0.1",
-        authors = {"tuxed"},
-        dependencies = {
-            @Dependency(id = "viaversion", optional = true)
-        })
+@Plugin("shout")
 public class ShoutSpongeBootstrap {
     private final Injector parentInjector;
     private final Path dataDirectory;
+    private final PluginContainer container;
 
     private ShoutPlugin plugin;
 
     @Inject
-    public ShoutSpongeBootstrap(Injector parentInjector, @ConfigDir(sharedRoot = false) Path dataDirectory) {
+    public ShoutSpongeBootstrap(Injector parentInjector, @ConfigDir(sharedRoot = false) Path dataDirectory,
+                                PluginContainer container) {
         this.parentInjector = parentInjector;
         this.dataDirectory = dataDirectory;
+        this.container = container;
     }
 
     @Listener
-    public void onGameStartingServer(GameStartingServerEvent event) {
+    public void onServerStart(StartedEngineEvent<Server> event) {
         Injector injector = parentInjector.createChildInjector(new ShoutPlatformModule(dataDirectory), new ShoutCommonModule());
         this.plugin = injector.getInstance(ShoutPlugin.class);
         plugin.onStart();
     }
 
     @Listener
-    public void onGameStopping(GameStoppingEvent event) {
+    public void onServerStop(StoppingEngineEvent<Server> event) {
         plugin.onShutdown();
+    }
+
+    public PluginContainer getContainer() {
+        return container;
     }
 }

@@ -1,4 +1,4 @@
-package me.steinborn.shout.platform.sponge.support;
+package me.steinborn.shout.platform.sponge7.support;
 
 import com.google.common.collect.ImmutableList;
 import me.steinborn.shout.platform.ShoutCommandInvoker;

@@ -1,21 +1,23 @@
-package me.steinborn.shout.platform.sponge.support;
+package me.steinborn.shout.platform.sponge8.support;
 
 import com.google.inject.Inject;
+import java.util.concurrent.TimeUnit;
 import me.steinborn.shout.platform.AbstractSchedulerTaskBuilder;
 import me.steinborn.shout.platform.ShoutScheduler;
-import me.steinborn.shout.platform.sponge.ShoutSpongeBootstrap;
+import me.steinborn.shout.platform.sponge8.ShoutSpongeBootstrap;
+import org.spongepowered.api.Engine;
+import org.spongepowered.api.Game;
+import org.spongepowered.api.scheduler.ScheduledTask;
 import org.spongepowered.api.scheduler.Scheduler;
-
-import java.util.concurrent.TimeUnit;
 
 public class SpongeShoutScheduler implements ShoutScheduler {
     private final SchedulerConfine serverConfine;
     private final SchedulerConfine asyncConfine;
 
     @Inject
-    public SpongeShoutScheduler(ShoutSpongeBootstrap plugin, Scheduler scheduler) {
-        this.serverConfine = new SpongeSchedulerConfine(false, plugin, scheduler);
-        this.asyncConfine = new SpongeSchedulerConfine(true, plugin, scheduler);
+    public SpongeShoutScheduler(ShoutSpongeBootstrap plugin, Engine engine, Game game) {
+        this.serverConfine = new SpongeSchedulerConfine(plugin, engine.scheduler());
+        this.asyncConfine = new SpongeSchedulerConfine(plugin, game.asyncScheduler());
     }
 
     @Override
@@ -29,45 +31,40 @@ public class SpongeShoutScheduler implements ShoutScheduler {
     }
 
     private static class SpongeSchedulerConfine implements SchedulerConfine {
-        private final boolean async;
         private final ShoutSpongeBootstrap plugin;
         private final Scheduler scheduler;
 
-        private SpongeSchedulerConfine(boolean async, ShoutSpongeBootstrap plugin, Scheduler scheduler) {
-            this.async = async;
+        private SpongeSchedulerConfine(ShoutSpongeBootstrap plugin, Scheduler scheduler) {
             this.plugin = plugin;
             this.scheduler = scheduler;
         }
 
         @Override
         public TaskBuilder createTaskBuilder(Runnable runnable) {
-            return new SpongeTaskBuilder(runnable, this.async, this.plugin, this.scheduler);
+            return new SpongeTaskBuilder(runnable, this.plugin, this.scheduler);
         }
     }
 
     private static class SpongeTaskBuilder extends AbstractSchedulerTaskBuilder {
-        private final boolean async;
         private final ShoutSpongeBootstrap plugin;
         private final Scheduler scheduler;
 
-        private SpongeTaskBuilder(Runnable task, boolean async, ShoutSpongeBootstrap plugin, Scheduler scheduler) {
+        private SpongeTaskBuilder(Runnable task, ShoutSpongeBootstrap plugin, Scheduler scheduler) {
             super(task);
-            this.async = async;
             this.plugin = plugin;
             this.scheduler = scheduler;
         }
 
-        private org.spongepowered.api.scheduler.Task platformSchedule() {
-            org.spongepowered.api.scheduler.Task.Builder builder = scheduler.createTaskBuilder()
+        private ScheduledTask platformSchedule() {
+            org.spongepowered.api.scheduler.Task.Builder builder = org.spongepowered.api.scheduler.Task.builder()
                     .execute(this.task)
+                    .plugin(this.plugin.getContainer())
                     .delay(this.delayInMillis, TimeUnit.MILLISECONDS);
-            if (this.async) {
-                builder.async();
-            }
             if (this.repeatInMillis != 0) {
                 builder.interval(this.repeatInMillis, TimeUnit.MILLISECONDS);
             }
-            return builder.submit(this.plugin);
+
+            return scheduler.submit(builder.build());
         }
 
         @Override
