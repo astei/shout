@@ -18,5 +18,5 @@ dependencies {
     // in all the APIs that are post-1.13.
     compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
     implementation 'org.slf4j:slf4j-jdk14:1.7.30'
-    implementation "net.kyori:adventure-platform-bukkit:${adventureVersion}"
+    implementation "net.kyori:adventure-platform-bukkit:${adventurePlatformVersion}"
 }

@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import me.steinborn.shout.announcement.store.AnnouncementStore;
 import me.steinborn.shout.announcement.store.EmptyAnnouncementStore;
 import me.steinborn.shout.platform.ConfigDir;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import ninja.leaping.configurate.SimpleConfigurationNode;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
@@ -78,7 +79,7 @@ public class ConfigurationHolder {
     }
 
     public void failsafe() {
-        ShoutConfig failsafeConfig = new ShoutConfig(Integer.MAX_VALUE, TextComponent.empty(),
+        ShoutConfig failsafeConfig = new ShoutConfig(Integer.MAX_VALUE, Component.empty(),
                 new ShoutConfig.Storage(ShoutConfig.StorageType.FLATFILE, SimpleConfigurationNode.root().setValue("dummy.yml")));
         AnnouncementStore fakeStore = new EmptyAnnouncementStore();
 

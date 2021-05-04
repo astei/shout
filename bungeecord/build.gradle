@@ -16,5 +16,5 @@ dependencies {
     implementation project(':shout-common')
     compileOnly 'net.md-5:bungeecord-api:1.16-R0.2-SNAPSHOT'
     implementation 'org.slf4j:slf4j-jdk14:1.7.30'
-    implementation "net.kyori:adventure-platform-bungeecord:${adventureVersion}"
+    implementation "net.kyori:adventure-platform-bungeecord:${adventurePlatformVersion}"
 }

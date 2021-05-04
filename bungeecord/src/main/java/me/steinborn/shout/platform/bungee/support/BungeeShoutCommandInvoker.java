@@ -18,7 +18,7 @@ public class BungeeShoutCommandInvoker implements ShoutCommandInvoker, Forwardin
 
     public BungeeShoutCommandInvoker(CommandSender sender, BungeeAudiences audiences, BungeeShoutPlatform platform) {
         this.platform = platform;
-        this.audience = audiences.audience(sender);
+        this.audience = audiences.sender(sender);
         this.sender = sender;
     }
 

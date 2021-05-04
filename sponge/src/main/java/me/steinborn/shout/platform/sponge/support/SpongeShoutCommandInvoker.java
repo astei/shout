@@ -18,7 +18,7 @@ public class SpongeShoutCommandInvoker implements ShoutCommandInvoker, Forwardin
 
     public SpongeShoutCommandInvoker(CommandSource sender, SpongeAudiences audiences, SpongeShoutPlatform platform) {
         this.platform = platform;
-        this.audience = audiences.audience(sender);
+        this.audience = audiences.receiver(sender);
         this.sender = sender;
     }
 

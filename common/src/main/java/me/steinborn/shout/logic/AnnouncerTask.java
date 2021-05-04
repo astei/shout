@@ -39,7 +39,7 @@ public class AnnouncerTask implements Runnable {
     }
 
     private Component formatAnnouncement(Announcement announcement, ShoutPlayer player) {
-        return TextComponent.builder()
+        return Component.text()
                 .append(configurationHolder.config().getPrefix())
                 .append(announcement.content())
                 .build();

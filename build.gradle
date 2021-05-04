@@ -34,12 +34,13 @@ subprojects {
         }
     }
 
-    ext.adventureVersion = '4.0.0-SNAPSHOT'
+    ext.adventureVersion = '4.7.0'
     ext.adventure = "net.kyori:adventure-api:${ext.adventureVersion}"
     ext.adventureGsonSerializer = "net.kyori:adventure-text-serializer-gson:${ext.adventureVersion}"
     ext.adventureLegacySerializer = "net.kyori:adventure-text-serializer-legacy:${ext.adventureVersion}"
     ext.adventureMiniMessage = "net.kyori:adventure-text-minimessage:3.0.0-SNAPSHOT"
-    ext.configurateVersion = '3.6.1'
+    ext.adventurePlatformVersion = '4.0.0-SNAPSHOT'
+    ext.configurateVersion = '3.7.1'
     ext.configurate = "org.spongepowered:configurate-core:${ext.configurateVersion}"
     ext.configurateYaml = "org.spongepowered:configurate-yaml:${ext.configurateVersion}"
     ext.configurateGson = "org.spongepowered:configurate-gson:${ext.configurateVersion}"
